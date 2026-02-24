@@ -15,7 +15,7 @@ const port = process.env.PORT || 3000;
 // await connectDB()
 
 app.use(cors({
-    origin:['http://localhost:5173','http://localhost:3000'],
+    origin:['http://localhost:5173','http://localhost:3000','https://thumblify-plum-chi.vercel.app'],
     credentials:true
 }))
 
