@@ -16,7 +16,7 @@ const port = process.env.PORT || 3000;
 
 
 app.use(cors({
-    origin:['http://localhost:5173','http://localhost:3000','https://thumblify-plum-chi.vercel.app'],
+    origin:['http://localhost:5173','http://localhost:3000'],
     credentials:true
 }))
 
