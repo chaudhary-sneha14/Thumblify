@@ -21,49 +21,42 @@ app.use(cors({
 }))
 
 
-app.use(express.json())
-
 app.set("trust proxy", 1);
 
 app.use(
   session({
-
-    secret: process.env.SESSION_SECRET,     // Secret key for signing session cookie
-    resave: false,                          // Avoid saving session if unchanged
-    saveUninitialized: false,               // Create session only when data exists
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
-     cookie: {
-  maxAge: 1000 * 60 * 60 * 24 * 7,
-  httpOnly: true,
-  secure: true,
-  sameSite: "none"
-}
+      maxAge: 1000 * 60 * 60 * 24 * 7, // one week 
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
     },
-
-    // Store sessions in MongoDB
     store: MongoStore.create({
-      mongoUrl: process.env.MONGOOSE_URI, // DB connection
-      collectionName: "sessions", // collection name
+      mongoUrl: process.env.MONGOOSE_URI,
+      collectionName: "sessions",
     }),
-  })
+  }),
 );
 
+app.use(express.json());
+
+app.use("/api/auth", AuthRouter);
+app.use("/api/thumbnail", ThumbnailRouter);
+app.use("/api/user", UserRouter);
 
 
-
-app.use('/api/auth',AuthRouter)
-app.use('/api/thumbnail',ThumbnailRouter)
-app.use('/api/user',UserRouter)
-
-app.get('/',(req,res)=>{
-    res.send("Server is Live!");
-})
-
-connectDB().then(() => {
-  app.listen(port, () => {
-    console.log(`Server running on port: ${port}`);
-  });
+app.get("/", (req, res) => {
+  res.send("Hello world");
 });
 
-export default app;
+connectDB().then(
+  app.listen(port, () => {
+    console.log(`Server running on port: ${port}`);
+  }),
+);
 
+export default app;
