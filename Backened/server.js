@@ -14,6 +14,7 @@ const app=express();
 const port = process.env.PORT || 3000;
 // await connectDB()
 
+
 app.use(cors({
     origin:['http://localhost:5173','http://localhost:3000','https://thumblify-plum-chi.vercel.app'],
     credentials:true
@@ -30,6 +31,10 @@ app.use(
     saveUninitialized: false,               // Create session only when data exists
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days  // Session cookie settings
+       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
     },
 
     // Store sessions in MongoDB
