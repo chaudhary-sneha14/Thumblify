@@ -49,11 +49,11 @@ app.use('/api/auth',AuthRouter)
 app.use('/api/thumbnail',ThumbnailRouter)
 app.use('/api/user',UserRouter)
 
-connectDB().then(
+connectDB().then(() => {
   app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
-  }),
-);
+  });
+});
 
 export default app;
 
