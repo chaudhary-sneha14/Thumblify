@@ -41,13 +41,15 @@ app.use(
 );
 
 
-app.get('/',(req,res)=>{
-    res.send("Server is Live!");
-})
+
 
 app.use('/api/auth',AuthRouter)
 app.use('/api/thumbnail',ThumbnailRouter)
 app.use('/api/user',UserRouter)
+
+app.get('/',(req,res)=>{
+    res.send("Server is Live!");
+})
 
 connectDB().then(() => {
   app.listen(port, () => {
