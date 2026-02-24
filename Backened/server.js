@@ -16,7 +16,7 @@ const port = process.env.PORT || 3000;
 
 
 app.use(cors({
-    origin:['http://localhost:5173','http://localhost:3000'],
+    origin:['http://localhost:5173','http://localhost:3000','https://thumblify-plum-chi.vercel.app'],
     credentials:true
 }))
 
@@ -30,11 +30,12 @@ app.use(
     resave: false,                          // Avoid saving session if unchanged
     saveUninitialized: false,               // Create session only when data exists
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days  // Session cookie settings
-       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      path: "/",
+     cookie: {
+  maxAge: 1000 * 60 * 60 * 24 * 7,
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+}
     },
 
     // Store sessions in MongoDB
@@ -45,16 +46,16 @@ app.use(
   })
 );
 
-app.get('/',(req,res)=>{
-    res.send("Server is Live!");
-})
+
 
 
 app.use('/api/auth',AuthRouter)
 app.use('/api/thumbnail',ThumbnailRouter)
 app.use('/api/user',UserRouter)
 
-
+app.get('/',(req,res)=>{
+    res.send("Server is Live!");
+})
 
 connectDB().then(() => {
   app.listen(port, () => {
